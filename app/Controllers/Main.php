@@ -3,6 +3,7 @@
 namespace App\Controllers;
 
 use App\Controllers\BaseController;
+use App\Models\ApiModel;
 use CodeIgniter\HTTP\ResponseInterface;
 
 class Main extends BaseController
@@ -51,11 +52,6 @@ class Main extends BaseController
                 $this->_init_error('Config file is not valid: API KEY is not a valid key...');
             }
 
-            // Check if system is already running
-            if (php_sapi_name() !== 'cli') {
-                $this->_init_error('System is already running...');
-            }
-
             // Check if system has write permissions
             if (!is_writable(APPPATH)) {
                 $this->_init_error('System does not have write permissions...');
@@ -66,16 +62,19 @@ class Main extends BaseController
             exit;
         }
 
+        // Everything is ok, set variable in session
+        session()->set($config_data);
 
-        // Set system timezone
-        //date_default_timezone_set($config_data['timezone']);
-
-        // Everything is ok
-        echo 'Everything is ok';
+        dd(session()->get());
     }
     public function index()
     {
-        echo 'my index...';
+        $api = new ApiModel();
+        // Call API method to get status
+        echo '<pre>';
+        print_r($api->get_status());
+        echo '</pre>';
+
     }
 
     private function _init_error($message)

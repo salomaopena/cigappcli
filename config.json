@@ -1,11 +1,5 @@
 {
     "api_url": "http://localhost/cigoffice/public/api/",
     "project_id": "10000",
-    "api_key": "9VnXXt19k3o955BrC22faY1mU96KOI7b",
-    "debugbar_url": "",
-    "debugbar_enabled": true,
-    "debugbar_time_limit": 1000,
-    "debugbar_time_new_limit": 5000,
-    "debugbar_time_format": "hh:mm:ss.SSS",
-    "timezone": "hh:mm:ss.SSS"
+    "api_key": "9VnXXt19k3o955BrC22faY1mU96KOI7b"
 }
