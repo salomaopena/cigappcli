@@ -50,9 +50,9 @@ class ApiModel extends Model
         curl_close($curl);
 
         if ($err) {
-            echo "cURL Error #:" . $err;
+            return null;
         } else {
-            echo $response;
+            return json_decode($response,true) ?? null ;
         }
     }
 
@@ -71,5 +71,9 @@ class ApiModel extends Model
 
     public function get_status(){
         return $this->_api('status');
+    }
+
+    public function get_restaturants(){
+        return $this->_api('restaurant');
     }
 }

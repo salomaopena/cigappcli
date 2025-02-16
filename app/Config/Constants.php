@@ -82,4 +82,8 @@ defined('EXIT__AUTO_MAX')      || define('EXIT__AUTO_MAX', 125);    // highest a
 //                     Custom constants                      //
 //===========================================================//
 
+define('APP_NAME',      'CIG APP CLIENT');
+define('APP_VERSION',   '1.0.0');
+
+
 define('ENCRYPTION_KEY', '!FXcuT9swzrx4n<]/+GIz#KLkGyw_9fb#4@"+o;hPHQwaX1$1OwQlsYAu28X+DT(');

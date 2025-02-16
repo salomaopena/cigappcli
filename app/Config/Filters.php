@@ -12,6 +12,7 @@ use CodeIgniter\Filters\InvalidChars;
 use CodeIgniter\Filters\PageCache;
 use CodeIgniter\Filters\PerformanceMetrics;
 use CodeIgniter\Filters\SecureHeaders;
+use App\Filters\CigAppCli;
 
 class Filters extends BaseFilters
 {
@@ -34,6 +35,7 @@ class Filters extends BaseFilters
         'forcehttps'    => ForceHTTPS::class,
         'pagecache'     => PageCache::class,
         'performance'   => PerformanceMetrics::class,
+        'cig_app_cli' => CigAppCli::class, // Custom filter for CLI applications
     ];
 
     /**
@@ -69,6 +71,13 @@ class Filters extends BaseFilters
      */
     public array $globals = [
         'before' => [
+            'cig_app_cli' => [
+                'except' => [
+                    '/init',
+                    '/init/error',
+                    '/stop'
+                ],
+            ], // Custom filter for CLI applications
             // 'honeypot',
             // 'csrf',
             // 'invalidchars',
