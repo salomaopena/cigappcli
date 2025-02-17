@@ -8,9 +8,7 @@
         <h3 class="mb-3">
             <i class="fa-solid fa-triangle-exclamation text-danger"></i>
         </h3>
-        <h3><?= $error ?></h3>
-
-        <a href="<?= site_url('/init') ?>" class="btn btn-outline-success btn-sm">Reiniciar inicialização</a>
+        <h4><?= $error ?></h4>
     </div>
 </div>
 <?= $this->endSection() ?>

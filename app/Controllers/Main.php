@@ -65,26 +65,88 @@ class Main extends BaseController
         // Everything is ok, set variable in session
         session()->set($config_data);
 
-        
+        $this->_get_restaurants();
+
+        // if everything is ok, show success page
+        $this->_init_success();
     }
+
+    private function _get_restaurants()
+    {
+        //load initial data
+        $api = new ApiModel();
+        // Call API method to get restaurants
+
+        $data = $api->get_restaturants();
+
+        if (!$this->_check_data($data)) {
+            //dd($data);
+            $this->init_error('System error: please contact the support');
+        }
+
+        //set initial data in session
+        $restaurant_data = [
+            'restaurant_detaisl' =>$data['data']['restaurant_details'],
+            'products_categories' =>$data['data']['products_categories'],
+            'products' =>$data['data']['products'],
+        ];
+        session()->set($restaurant_data);
+    }
+
+    private function _check_data($data)
+    {
+        if (
+            empty($data) ||
+            !is_array($data) ||
+            !key_exists("status", $data) ||
+            !key_exists("message", $data) ||
+            $data["status"] != 200 ||
+            $data["message"] != "Success"
+        ) {
+            return false;
+        }
+        return true;
+    }
+
+    private function _init_success(){
+        dd(session()->get());
+        //prepare the datas
+        $data = [
+            'initieted_at'   => date('Y-m-d H:i:s'),
+            'restaurant_id'  => session()->get('restaurant_details')['project_id'],
+            'restaurant_name' => session()->get('restaurant_details')['name'],
+            'categories'     => $this->_get_restaurant_categories(),//...
+            'products'      =>   '',
+        ];
+
+
+    }
+
+    private function _get_restaurant_categories(){
+        
+        $categories = [];
+        //load categories
     
+    }
+
     public function init_error($message = null)
     {
         if (empty($message)) {
             $message = session()->getFlashdata('error');
         }
-        
+
         if (empty($message)) {
-            echo ('Error');
+            echo ('System error. Please contact the support.');
             exit();
         }
-        
+
         echo view('errors/init_error', ['error' => $message]);
         die();
     }
 
 
-    public function stop(){
+    public function stop()
+    {
         session()->destroy();
         $this->init_error('Application configuration has been reseted...');
     }
@@ -96,6 +158,4 @@ class Main extends BaseController
         print_r($api->get_status());
         echo '</pre>';
     }
-
-
 }
