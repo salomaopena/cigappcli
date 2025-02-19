@@ -86,9 +86,9 @@ class Main extends BaseController
 
         //set initial data in session
         $restaurant_data = [
-            'restaurant_detaisl' =>$data['data']['restaurant_details'],
-            'products_categories' =>$data['data']['products_categories'],
-            'products' =>$data['data']['products'],
+            'restaurant_detaisl' => $data['data']['restaurant_details'],
+            'products_categories' => $data['data']['products_categories'],
+            'products' => $data['data']['products'],
         ];
         session()->set($restaurant_data);
     }
@@ -108,25 +108,46 @@ class Main extends BaseController
         return true;
     }
 
-    private function _init_success(){
-        dd(session()->get());
+    private function _init_success()
+    {
+        //dd(session()->get());
         //prepare the datas
         $data = [
-            'initieted_at'   => date('Y-m-d H:i:s'),
-            'restaurant_id'  => session()->get('restaurant_details')['project_id'],
-            'restaurant_name' => session()->get('restaurant_details')['name'],
-            'categories'     => $this->_get_restaurant_categories(),//...
-            'products'      =>   '',
+            'initiated_at'   => date('Y-m-d H:i:s'),
+            'restaurant_id'  => session()->get('restaurant_detaisl')['project_id'],
+            'restaurant_name' => session()->get('restaurant_detaisl')['name'],
+            'categories'     => $this->_get_restaurant_categories(), //...
+            'products'      =>   $this->_get_restaurant_products_and_stock(),
         ];
 
-
+        echo view('init_success',$data);
+        die();
+        
     }
 
-    private function _get_restaurant_categories(){
-        
+    private function _get_restaurant_categories()
+    {
         $categories = [];
         //load categories
-    
+        foreach (session()->get('products_categories ') as $category) {
+            $categories[] = $category['category'];
+        }
+        return $categories;
+    }
+
+    private function _get_restaurant_products_and_stock()
+    {
+        $products = [];
+        //load products
+        foreach (session()->get('products') as $product) {
+            $products[] = [
+                'image' => $product['image'],
+                'name' => $product['name'],
+                'price' => $product['price'],
+                'stock' => $product['stock'],
+            ];
+        }
+        return $products;
     }
 
     public function init_error($message = null)
