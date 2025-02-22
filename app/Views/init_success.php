@@ -14,7 +14,7 @@
                         <p>Date: <strong><?= $initiated_at ?></strong></p>
                     </div>
                     <div class="col text-end">
-                        <a href="<?= base_url('/') ?>" class="btn btn-primary"><i class="fas fa-chevron-right me-2"></i>Avançar</a>
+                        <a href="<?= base_url('/') ?>" class="cig-primary"><i class="fas fa-chevron-right me-2"></i>Avançar</a>
                     </div>
                 </div>
                 <hr>
