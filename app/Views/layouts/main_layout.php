@@ -5,7 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?= APP_NAME ?></title>
-    <link rel="icon" type="image/png" href="<?= base_url('assets/images/logo.png') ?>">
+
+    <link rel="shortcut icon" type="image/png" href="<?= base_url('assets/images/logo.png') ?>">
 
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="<?= base_url('assets/bootstrap/bootstrap.min.css') ?>">
@@ -26,7 +27,16 @@
     </div>
 
     <!--Content -->
-    <?= $this->renderSection('content')?>
+    <?= $this->renderSection('content') ?>
+
+
+    <!-- Footer -->
+    <footer class="my-5 text-center text-muted">
+
+        <p><i class="fa-solid fa-burger me-2"></i>
+      &copy; 2022 - <?= date('Y') ?> <?= APP_NAME ?>. Todos os direitos reservados </p>
+    </footer>
+
 
     <script src="<?= base_url('assets/bootstrap/bootstrap.bundle.min.js') ?>"></script>
     <script src="<?= base_url('assets/fontawesome/js/all.min.js') ?>"></script>
