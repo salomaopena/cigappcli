@@ -173,10 +173,9 @@ class Main extends BaseController
     }
     public function index()
     {
-        $api = new ApiModel();
-        // Call API method to get status
-        echo '<pre>';
-        print_r($api->get_status());
-        echo '</pre>';
+        //clear any previous order from client
+        session()->remove('customer_order');
+
+        //display order page > a large button to start a new customer order
     }
 }
