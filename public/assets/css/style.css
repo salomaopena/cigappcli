@@ -14,3 +14,37 @@
     border: 2px solid #ff7300;
     box-shadow: 0 0 1 rgba(0, 0, 0, 0.3);
 }
+
+
+.cig-burger-title{
+    color:rgb(255, 60, 0);
+}
+
+.cig-buger-punchline{
+    color: rgb(255, 134, 22)
+}
+
+
+/*categories css*/
+.category{
+    display: flex;
+    align-items: center;
+    height: 80px;
+    text-decoration: none;
+    text-align: center;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    margin: 2px;
+    padding: 10px 20px;
+}
+
+.category:hover{
+    background-color: rgb(255,215,141);
+    border: 1px solid #ff7300;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.category:link{
+    text-decoration: none;
+    color: black;
+}

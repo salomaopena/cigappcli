@@ -177,5 +177,8 @@ class Main extends BaseController
         session()->remove('customer_order');
 
         //display order page > a large button to start a new customer order
+
+       // echo view('main');
+        return view('main');
     }
 }
