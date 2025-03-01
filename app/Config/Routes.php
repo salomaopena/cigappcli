@@ -14,6 +14,7 @@ $routes->get('/stop','Main::stop');
 
 //orders routs
 $routes->get('/order','Order::index');
+$routes->get('/order/set_filter/(:alphanum)','Order::setFilter/$1');
 $routes->get('/order/add','Order::add');
 $routes->get('/order/(:num)','Order::view/$1');
 $routes->get('/order/edit/(:num)','Order::edit/$1');

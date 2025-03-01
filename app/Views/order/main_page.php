@@ -3,8 +3,15 @@
 
 <div class="container">
     <div class="row justify-content-center">
-        <div class="col-10 card p-4">
+        <div class="col card p-4">
+
             <!-- Categorias-->
+             <?= $this->include('order/order_category',['categories'=>$categories])?>
+
+             <div class="text-center mt-3">
+                <h3><?= $selected_category?></h3>
+             </div>
+
             <div class="text-center my-3">
                 Produtos
             </div>
