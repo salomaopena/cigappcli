@@ -12,8 +12,8 @@
                 <h3><?= $selected_category?></h3>
              </div>
 
-            <div class="text-center my-3">
-                Produtos
+            <div class="my-5">
+                <?= $this->include('order/products',['products'=>$products])?>
             </div>
             <div class="text-center my-3">
                 Cancelar | Finalizar

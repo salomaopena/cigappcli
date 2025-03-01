@@ -28,8 +28,13 @@ class Order extends BaseController
 
        $data['selected_category'] = $selected_category;
 
+       $products = $this->_get_products_by_category($selected_category);
+
+       //calculate product discount, state, etc.
+       $products = $this->_set_products_info($products);
+
        //$selected_category = 'Bebidas';
-       $data['products'] = $this->_get_products_by_category($selected_category);
+       $data['products'] = $products;
 
         //load products from session
         //$data = ['products' => session()->get('products')];
@@ -56,6 +61,43 @@ class Order extends BaseController
             }
         }
         return $products_by_category;
+    }
+
+    private function _set_products_info($products){
+        //calculate product discount, state, etc.
+
+        $temp = [];
+        //add discount, state, etc. to each product in the array
+
+        for ($index = 0; $index< count($products); $index++){
+            
+            $product = $products[$index];
+            //is product available
+
+            if($product['availability']==0 || !empty($product['deleted_at'])) continue;
+
+            //promotion
+
+            if ($product['promotion'] > 0){
+                $product['has_promotion'] = true;
+                $product['old_price'] = $product['price'];
+                $product['price'] = $product['price'] - ($product['price'] * ($product['promotion'] / 100));
+            }else{
+                $product['has_promotion'] = false;
+                $product['old_price'] = 0.0;
+
+            }
+            //state
+            if($product['stock']<= $product['stock_min_limit']){
+                $product['out_of_stock'] = true;  
+            }else{
+                $product['out_of_stock'] = false;  
+            }
+
+            $temp[] = $product;
+        }
+
+        return $temp;
     }
 
 

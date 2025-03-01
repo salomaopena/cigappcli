@@ -48,3 +48,61 @@
     text-decoration: none;
     color: black;
 }
+
+/*products*/
+
+.no-link{
+    text-decoration: none;
+}
+
+.order-product{
+    border: 1px solid rgb(220,220,220);
+    border-radius: 10px;
+    padding: 10px;
+    margin: 5px;
+}
+
+.order-product:hover{
+    background-color: #FFFFFF;
+    border: 1px solid #ff7300;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.4);
+}
+
+.order-product-title{
+    color: rgb(255, 127, 68);
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.order-product-price{
+    color: rgb(134, 1, 1);
+    font-size: 36px;
+    font-weight: bold;
+    padding: 0px;
+    margin: 0px;
+}
+
+.order-product-old-price{
+    color: rgb(100, 100, 100);
+    font-size: 18px;
+    border-radius: 50px;
+    font-weight: bold;
+    text-decoration: line-through;
+}
+
+
+.discount-percentage{
+    background-color:rgb(255, 60, 0);
+    color:#ffffff;
+    font-size: 18px;
+    border-radius: 50px;
+    padding: 5px;
+}
+
+.product-out-of-stock{
+    font-weight: bold;
+    font-size: 24px;
+    padding: 8px;
+    text-decoration: line-through;
+    color: rgb(200, 200, 200);
+}
