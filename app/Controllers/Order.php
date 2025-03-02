@@ -112,4 +112,33 @@ class Order extends BaseController
 
         return redirect()->to(site_url('order'));
     }
+
+    public function cancel(){
+        //check if there is an prder with, at least on item
+        $order = get_order();
+
+        if(empty($order['items'])){
+            return redirect()->to(site_url('/'));
+        }
+        
+        //show cancel confirmation
+        
+        return view('order/cancel_confirmation');
+    }
+
+    public function checkout(){
+        //check if order is valid
+        $order = get_order();
+        dd($order);
+        if(empty($order)){
+            return redirect()->to(site_url('order'));
+        }
+
+        //do checkout
+        //save order to db
+        //clear session
+        delete_order();
+        die('Pedido realizado com sucesso!');
+        //return redirect()->to(site_url('order'));
+    }
 }

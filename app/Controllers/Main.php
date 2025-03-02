@@ -9,7 +9,19 @@ use CodeIgniter\HTTP\ResponseInterface;
 class Main extends BaseController
 {
 
-    public function init()
+
+    public function init(){
+        // load restaurant details
+        $this->_init_system();
+
+        //set a temporary flag in session to indicate that the system has been initiated
+
+        session()->setFlashdata('system_was_initiated',true);
+
+        //if everythings is ok, show success page
+        $this->_init_success();
+    }
+    private function _init_system()
     {
         try {
             // Check if file config.json exist
@@ -68,7 +80,7 @@ class Main extends BaseController
         $this->_get_restaurants();
 
         // if everything is ok, show success page
-        $this->_init_success();
+        //$this->_init_success();
     }
 
     private function _get_restaurants()
@@ -173,11 +185,16 @@ class Main extends BaseController
     }
     public function index()
     {
-        //clear any previous order from client
-        session()->remove('customer_order');
+        //reset any previous order and set a new one
+        init_order();
 
-        //display order page > a large button to start a new customer order
+        //TEMP TEMP TEMP
+        add_product_temp();
 
+        //update the session about the restaurant if necessary
+        if(empty(session()->getFlashdata('system_was_initiated'))){
+            $this->_init_system();
+        }
        // echo view('main');
         return view('main');
     }

@@ -16,7 +16,9 @@
                 <?= $this->include('order/products',['products'=>$products])?>
             </div>
             <div class="text-center my-3">
-                Cancelar | Finalizar
+                <a href="<?= site_url('order/cancel')?>">Cancelar pedido</a>
+                <span class="mx-5">|</span>
+                <a href="<?= site_url('order/checkout')?>">Finalizar pedido</a>
             </div>
         </div>
     </div>
