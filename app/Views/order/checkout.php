@@ -14,7 +14,13 @@
                 <hr>
                 <?php foreach ($order_products as $product): ?>
                     <div class="row">
-                        <div class="col d-flex align-items-center">
+                        <div class="col-7 d-flex align-items-center">
+
+
+                        <a href="<?= site_url('/order/remove/' . Encrypt($product['id']))?>" class="cig-primary px-3 me-2"><i class="fa-regular fa-trash-can"></i></a>
+                        <a href="#" class="cig-primary px-3 me-2"><i class="fa-solid fa-gear"></i></a>
+                    
+
                             <img src="<?= API_IMAGE_URL . $product['image'] ?>" alt="<?= $product['name'] ?>" class="img-fluid rounded-5" width="100">
                             <p class="order-product-title me-3"><?= $product['name'] ?></p>
                         </div>

@@ -178,6 +178,20 @@ class Order extends BaseController
         return view('/order/add',$data);
     }
 
+    public function remove($enc_id){
+        $id = Decrypt($enc_id);
+        //check if id is decrypted
+        if(empty($id)){
+            return redirect()->to(site_url('/order'));
+        }
+
+        //remove product from order
+        update_order($id,0,0.0);
+
+        //redirect to order checkout page
+        return redirect()->to(site_url('/order/checkout'));
+    }
+
     private function _get_product_by_id($id)
     {
         //get product from session
