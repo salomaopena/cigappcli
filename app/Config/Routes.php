@@ -19,3 +19,4 @@ $routes->get('/order/cancel/','Order::cancel');
 $routes->get('/order/checkout','Order::checkout');
 $routes->get('/order/add/(:alphanum)','Order::add/$1');
 $routes->get('/order/add/confirm/(:alphanum)/(:num)','Order::add_confirm/$1/$2');
+$routes->get('/order/checkout/payment/(:alphanum)/(:num)','Order::add_confirm/$1/$2');

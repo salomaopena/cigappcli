@@ -3,7 +3,7 @@
 
 <div class="container">
     <div class="row justify-content-center">
-        <div class="col-10 card p-5">
+        <div class="col-12 card p-5">
             <?php if ($total_products == 0): ?>
                 <h4 class="p-5 text-secondary text-center">Nenhum produto encontrado.</h4>
                 <div class="text-center mb-5">
@@ -47,6 +47,19 @@
                             <?= format_currency($total_price) ?>
                         </h5>
                     </div>
+                </div>
+
+
+                <div class="d-flex justify-content-between my-5">
+                    <h5><a href="<?= site_url('/order/cancel') ?>" class="cig-primary p-3">
+                            <i class="fa-solid fa-ban me-3"></i>Cancelar pedido
+                        </a></h5>
+                    <h5><a href="<?= site_url('/order') ?>" class="cig-primary p-3">
+                            <i class="fa-solid fa-check me-3"></i>Voltar
+                        </a></h5>
+                    <h5><a href="<?= site_url('/order/checkout/payment') ?>" class="cig-primary p-3">
+                            <i class="fa-regular fa-credit-card me-3"></i>Finalizar pedido
+                        </a></h5>
                 </div>
             <?php endif; ?>
         </div>
