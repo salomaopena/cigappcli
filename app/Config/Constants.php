@@ -89,3 +89,6 @@ define('APP_VERSION',   '1.0.0');
 define('ENCRYPTION_KEY', '!FXcuT9swzrx4n<]/+GIz#KLkGyw_9fb#4@"+o;hPHQwaX1$1OwQlsYAu28X+DT(');
 
 define('API_IMAGE_URL','http://localhost/cigoffice/public/assets/images/products/');
+
+//max quantity of each product in order
+define('MAX_QUANTITY_PER_PRODUCT', 20);

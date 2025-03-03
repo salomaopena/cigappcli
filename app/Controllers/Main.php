@@ -188,9 +188,6 @@ class Main extends BaseController
         //reset any previous order and set a new one
         init_order();
 
-        //TEMP TEMP TEMP
-        add_product_temp();
-
         //update the session about the restaurant if necessary
         if(empty(session()->getFlashdata('system_was_initiated'))){
             $this->_init_system();
