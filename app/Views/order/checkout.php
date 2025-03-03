@@ -16,10 +16,12 @@
                     <div class="row">
                         <div class="col-7 d-flex align-items-center">
 
+                            <span id="btn-remove-<?= Encrypt($product['id']) ?>" class="cig-primary px-3 me-2" style="cursor:pointer">
+                                <i class="fa-regular fa-trash-can"></i>
+                            </span>
 
-                        <a href="<?= site_url('/order/remove/' . Encrypt($product['id']))?>" class="cig-primary px-3 me-2"><i class="fa-regular fa-trash-can"></i></a>
-                        <a href="<?= site_url('/order/add/' . Encrypt($product['id'])) ?>" class="cig-primary px-3 me-2"><i class="fa-solid fa-gear"></i></a>
-                    
+                            <a href="<?= site_url('/order/add/' . Encrypt($product['id'])) ?>" class="cig-primary px-3 me-2"><i class="fa-solid fa-gear"></i></a>
+
 
                             <img src="<?= API_IMAGE_URL . $product['image'] ?>" alt="<?= $product['name'] ?>" class="img-fluid rounded-5" width="100">
                             <p class="order-product-title me-3"><?= $product['name'] ?></p>
@@ -71,5 +73,48 @@
         </div>
     </div>
 </div>
+
+
+
+<!--Modal Dialog-->
+
+<div class="modal fade" id="modal-remove-item" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="modal-remove-item-label" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="modal-remove-item-label">Remover item</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <h1 class="text-danger text-center"><i class="fa-solid fa-exclamation-circle me-2"></i></h1>
+                <h5 class="text-center">Deseja remover o item do pedido?</h5>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="cig-primary" data-bs-dismiss="modal">Não</button>
+                <button type="button" class="cig-primary" id="btn-confirm">Sim</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--End modal dialog-->
+
+<script>
+    let id = null;
+    let btn_remove = document.querySelectorAll('[id^="btn-remove-"]');
+    btn_remove.forEach(btn => {
+        btn.addEventListener('click', () => {
+            id = btn.id.split('-')[2];
+            let modal = new bootstrap.Modal(document.querySelector('#modal-remove-item'));
+            modal.show();
+        });
+    });
+
+
+    let btn_confirm = document.querySelector('#btn-confirm');
+    btn_confirm.addEventListener('click', () => {
+        window.location.href = '<?= site_url('/order/remove/') ?>' + id;
+    });
+</script>
 
 <?= $this->endsection() ?>
