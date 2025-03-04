@@ -90,8 +90,8 @@
                 <h5 class="text-center">Deseja remover o item do pedido?</h5>
             </div>
             <div class="modal-footer">
-                <button type="button" class="cig-primary" data-bs-dismiss="modal">Não</button>
-                <button type="button" class="cig-primary" id="btn-confirm">Sim</button>
+                <button type="button" class="cig-primary" data-bs-dismiss="modal"><i class="fa-solid fa-xmark me-3"></i>Não</button>
+                <button type="button" class="cig-primary" id="btn-confirm"><i class="fa-solid fa-check me-3"></i>Sim</button>
             </div>
         </div>
     </div>

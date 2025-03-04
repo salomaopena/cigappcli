@@ -3,6 +3,7 @@
 namespace App\Controllers;
 
 use App\Controllers\BaseController;
+use App\Models\ApiModel;
 use CodeIgniter\HTTP\ResponseInterface;
 
 class Order extends BaseController
@@ -36,13 +37,13 @@ class Order extends BaseController
         //$selected_category = 'Bebidas';
         $data['products'] = $products;
 
-        
+
         //calculate total items in the order
         $data['total_items'] = get_order_total_items();
 
         $data['total_price'] = get_order_total_price();
 
-        
+
 
         return view('order/main_page', $data);
     }
@@ -170,23 +171,31 @@ class Order extends BaseController
         //check if product is already in the order and get the quantity
         $quantity = get_quantity_in_order($id);
 
+
+        //if the product does not exists, set quantity to 1
+
+        if (empty($quantity)) {
+            $quantity = 1;
+        }
+
         //display page to add product 
         $data['product'] = $product;
         $data['quantity'] = $quantity;
 
         //redirect to order page
-        return view('/order/add',$data);
+        return view('/order/add', $data);
     }
 
-    public function remove($enc_id){
+    public function remove($enc_id)
+    {
         $id = Decrypt($enc_id);
         //check if id is decrypted
-        if(empty($id)){
+        if (empty($id)) {
             return redirect()->to(site_url('/order'));
         }
 
         //remove product from order
-        update_order($id,0,0.0);
+        update_order($id, 0, 0.0);
 
         //redirect to order checkout page
         return redirect()->to(site_url('/order/checkout'));
@@ -207,16 +216,17 @@ class Order extends BaseController
     }
 
 
-    public function add_confirm($enc_id, $quantity){
+    public function add_confirm($enc_id, $quantity)
+    {
 
         $id = Decrypt($enc_id);
         //check if id  and quantity are valid
-        if(empty($id)){
+        if (empty($id)) {
             return redirect()->to(site_url('/order'));
         }
 
         //check if quantity is valid
-        if($quantity < 0 || $quantity > MAX_QUANTITY_PER_PRODUCT){
+        if ($quantity < 0 || $quantity > MAX_QUANTITY_PER_PRODUCT) {
             return redirect()->to(site_url("/order"));
         }
 
@@ -243,7 +253,7 @@ class Order extends BaseController
 
         $order_products = [];
 
-        foreach($order['items'] as $id_product => $item){
+        foreach ($order['items'] as $id_product => $item) {
             $product = $this->_get_product_by_id($id_product);
 
             //adicional product datails based on the order
@@ -259,7 +269,80 @@ class Order extends BaseController
         }
 
         $data['order_products'] = $order_products;
-       
-        return view('/order/checkout',$data);
+
+        return view('/order/checkout', $data);
+    }
+
+    public function order_checkout_payment(){
+        //check if order is valid
+        $order = get_order();
+
+        //prepare data to display
+        $data['total_products'] = get_order_total_items();
+        $data['total_price'] = get_order_total_price();
+
+        $order_products = [];
+
+        foreach ($order['items'] as $id_product => $item) {
+            $product = $this->_get_product_by_id($id_product);
+
+            //adicional product datails based on the order
+            $product['quantity'] = $item['quantity'];
+
+            //calculate total price for each product in the order
+            $this->check_product_promotion($product);
+
+            $product['total_price'] = $item['quantity'] * $item['price'];
+
+            //add product to the list
+            $order_products[] = $product;
+        }
+
+        $data['order_products'] = $order_products;
+
+        return view('/order/checkout_payment', $data);
+    }
+
+    public function order_payment_process(){
+        //validate payment
+        $data['total_price'] = get_order_total_price();
+
+        //fake pin number
+        $data['pin_number'] =strval(random_int(1000,9999));
+
+        //check if there was an error
+
+        $data['error'] = session()->getFlashdata('error');
+        
+        //display checkout page (payment simulation)
+        return view('/order/payment_process', $data);
+    }
+
+    public function checkout_payment_confirm(){
+        //get PIN value
+        $pin_value = Decrypt($this->request->getPost('pin_value'));
+        $pin_number = $this->request->getPost('pin_number');
+
+        //check if PIN is valid
+        if(empty($pin_number)){
+            return redirect()->back()->with('error','Aconteceu um erro com o PIN. Tente novamente');
+        }
+
+        if(empty($pin_number) || !preg_match("/^\d{4}$/",$pin_number) || $pin_number != $pin_value){
+            return redirect()->back()->with('error','PIN inválido');
+        }
+
+        //prepare data to send the request to the CigBackofi BO API
+
+        $data = [
+            'restaurant_id' =>session()->get('restaurant_details')['project_id'],
+            'order' => get_order(),
+            'machine_id' => session()->get('machine_id')
+        ];
+
+        //send request to CigBackofi BO API
+        $api = new ApiModel();
+        $response = $api->request_checkout($data);
+
     }
 }

@@ -76,4 +76,11 @@ class ApiModel extends Model
     public function get_restaturants(){
         return $this->_api('restaurant');
     }
+
+    public function request_checkout($data){
+        echo '<pre>';
+        print_r($data);
+        echo '</pre>';
+        die();
+    }
 }

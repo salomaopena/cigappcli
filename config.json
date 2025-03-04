@@ -1,5 +1,6 @@
 {
     "api_url": "http://localhost/cigoffice/public/api/",
     "project_id": "10000",
-    "api_key": "9VnXXt19k3o955BrC22faY1mU96KOI7b"
+    "api_key": "9VnXXt19k3o955BrC22faY1mU96KOI7b",
+    "machine_id": "SALOMAOBE"
 }

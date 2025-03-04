@@ -144,3 +144,17 @@
     color: rgb(200, 200, 200);
 }
 
+
+.order-resume{
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 22px;
+    font-weight: bold;
+}
+
+#pin_number{
+    font-family: 'Courier New', Courier, monospace;
+    padding: 5px;
+    font-size: 52px;
+    font-weight: bold;
+    background-color: #9db191;
+}

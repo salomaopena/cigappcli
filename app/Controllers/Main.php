@@ -49,6 +49,11 @@ class Main extends BaseController
                 $this->init_error('Config file is not valid: API KEY is missing...');
             }
 
+            //check machine ID
+            if (!key_exists('machine_id', $config_data)) {
+                $this->init_error('Config file is not valid: MACHINE ID is missing...');
+            }
+
             // Check if API URL is valid
             if (!filter_var($config_data['api_url'], FILTER_VALIDATE_URL)) {
                 $this->init_error('Config file is not valid: URL is not a valid URL...');
@@ -98,7 +103,7 @@ class Main extends BaseController
 
         //set initial data in session
         $restaurant_data = [
-            'restaurant_detaisl' => $data['data']['restaurant_details'],
+            'restaurant_details' => $data['data']['restaurant_details'],
             'products_categories' => $data['data']['products_categories'],
             'products' => $data['data']['products'],
         ];
@@ -126,8 +131,8 @@ class Main extends BaseController
         //prepare the datas
         $data = [
             'initiated_at'   => date('Y-m-d H:i:s'),
-            'restaurant_id'  => session()->get('restaurant_detaisl')['project_id'],
-            'restaurant_name' => session()->get('restaurant_detaisl')['name'],
+            'restaurant_id'  => session()->get('restaurant_details')['project_id'],
+            'restaurant_name' => session()->get('restaurant_details')['name'],
             'categories'     => $this->_get_restaurant_categories(), //...
             'products'      =>   $this->_get_restaurant_products_and_stock(),
         ];
