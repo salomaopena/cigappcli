@@ -343,6 +343,7 @@ class Order extends BaseController
         //send request to CigBackofi BO API
         $api = new ApiModel();
         $response = $api->request_checkout($data);
+        dd($response);
 
     }
 }

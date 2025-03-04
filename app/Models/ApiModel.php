@@ -78,9 +78,6 @@ class ApiModel extends Model
     }
 
     public function request_checkout($data){
-        echo '<pre>';
-        print_r($data);
-        echo '</pre>';
-        die();
+        return $this->_api('checkout', 'POST', $data);
     }
 }
