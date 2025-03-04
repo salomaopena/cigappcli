@@ -340,10 +340,23 @@ class Order extends BaseController
             'machine_id' => session()->get('machine_id')
         ];
 
+        //set order status as paid
+        $data['order']['status'] = 'paid';
+
+        //..........................................
+        //Teste
+        //...........................................
+        //unset($data['machine_id']);
+        //unset($data['restaurant_id']);
+        //unset($data['order']['status']);
+        //unset($data['order']['items']);
+        //unset($data['order']);
+
         //send request to CigBackofi BO API
         $api = new ApiModel();
         $response = $api->request_checkout($data);
-        dd($response);
+        echo '<pre>';
+        print_r($response);
 
     }
 }
