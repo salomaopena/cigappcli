@@ -4,6 +4,9 @@ function init_order(){
     //clear order, if exists
     delete_order();
 
+    //set selected category
+    session()->set('selected_category', 'Todos');
+
     //set new empty order
     session()->set('order', [
         'items' => [],
@@ -93,4 +96,21 @@ function get_order_total_price(){
     }
 
     return $total;
+}
+
+function update_order_number($id_order, $order_number, $order_series,$order_code){
+    $order = get_order();
+
+
+    if(empty($order['items'])) return;
+
+    //update order in session
+
+    $order['id_order'] = $id_order;
+    $order['order_number'] = $order_number;
+    $order['order_series'] = $order_series;
+    $order['order_code'] = $order_code;
+
+    
+    session()->set('order', $order);
 }

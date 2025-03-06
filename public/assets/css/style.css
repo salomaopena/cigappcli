@@ -158,3 +158,8 @@
     font-weight: bold;
     background-color: #9db191;
 }
+
+.order-resume-final-font{
+    font-family: 'Courier New', Courier, monospace;
+    font-weight: bold;
+}

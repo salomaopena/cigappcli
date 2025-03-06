@@ -80,4 +80,8 @@ class ApiModel extends Model
     public function request_checkout($data){
         return $this->_api('checkout', 'POST', $data);
     }
+
+    public function request_final_confirmation($data){
+        return $this->_api('final_confirmation', 'POST', $data);
+    }
 }

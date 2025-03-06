@@ -273,7 +273,8 @@ class Order extends BaseController
         return view('/order/checkout', $data);
     }
 
-    public function order_checkout_payment(){
+    public function order_checkout_payment()
+    {
         //check if order is valid
         $order = get_order();
 
@@ -303,39 +304,41 @@ class Order extends BaseController
         return view('/order/checkout_payment', $data);
     }
 
-    public function order_payment_process(){
+    public function order_payment_process()
+    {
         //validate payment
         $data['total_price'] = get_order_total_price();
 
         //fake pin number
-        $data['pin_number'] =strval(random_int(1000,9999));
+        $data['pin_number'] = strval(random_int(1000, 9999));
 
         //check if there was an error
 
         $data['error'] = session()->getFlashdata('error');
-        
+
         //display checkout page (payment simulation)
         return view('/order/payment_process', $data);
     }
 
-    public function checkout_payment_confirm(){
+    public function checkout_payment_confirm()
+    {
         //get PIN value
         $pin_value = Decrypt($this->request->getPost('pin_value'));
         $pin_number = $this->request->getPost('pin_number');
 
         //check if PIN is valid
-        if(empty($pin_number)){
-            return redirect()->back()->with('error','Aconteceu um erro com o PIN. Tente novamente');
+        if (empty($pin_number)) {
+            return redirect()->back()->with('error', 'Aconteceu um erro com o PIN. Tente novamente');
         }
 
-        if(empty($pin_number) || !preg_match("/^\d{4}$/",$pin_number) || $pin_number != $pin_value){
-            return redirect()->back()->with('error','PIN inválido');
+        if (empty($pin_number) || !preg_match("/^\d{4}$/", $pin_number) || $pin_number != $pin_value) {
+            return redirect()->back()->with('error', 'PIN inválido');
         }
 
         //prepare data to send the request to the CigBackofi BO API
 
         $data = [
-            'restaurant_id' =>session()->get('restaurant_details')['project_id'],
+            'restaurant_id' => session()->get('restaurant_details')['project_id'],
             'order' => get_order(),
             'machine_id' => session()->get('machine_id')
         ];
@@ -355,8 +358,76 @@ class Order extends BaseController
         //send request to CigBackofi BO API
         $api = new ApiModel();
         $response = $api->request_checkout($data);
-        echo '<pre>';
-        print_r($response);
 
+        //check if there was an error because the product is out of stock
+
+        if ($response['status'] == 400) {
+            return redirect()->back()->with('error', 'O seu pedido não pode ser processado. Dirija-se ao balcão.');
+        }
+
+        //FINALIZE ORDER
+        //get id restaurant
+        $data['id_restaurant'] = session()->get('restaurant_details')['id'];
+        //get totoal price
+        $data['total_price'] = get_order_total_price();
+
+        //if there was no error, order was processed successfully
+        $response = $api->request_final_confirmation($data);
+
+        //check if there was an error
+        if ($response['status'] == 400) {
+            return redirect()->back()->with('error', 'O seu pedido não pode ser processado. Dirija-se ao balcão.');
+        }
+
+        //get the order id an calculate the order number an series
+        $id_order = $response['data']['id_order'];
+        $temp = define_order_number_from_id($id_order);
+        $order_number = $temp['order_number'];
+        $order_series = $temp['order_series'];
+        $order_code = $temp['order_code'];
+
+        //update the order in the session with the new order number and series
+        update_order_number($id_order, $order_number, $order_series,$order_code);
+
+        $this->_show_order_recipt();
+    }
+
+    private function _show_order_recipt(){
+        //check if order is valid
+        $order = get_order();
+
+        //prepare data to display
+        $data['total_products'] = get_order_total_items();
+        $data['total_price'] = get_order_total_price();
+
+        $order_products = [];
+
+        foreach ($order['items'] as $id_product => $item) {
+            $product = $this->_get_product_by_id($id_product);
+
+            //adicional product datails based on the order
+            $product['quantity'] = $item['quantity'];
+
+            //calculate total price for each product in the order
+            $this->check_product_promotion($product);
+
+            $product['total_price'] = $item['quantity'] * $item['price'];
+
+            //add product to the list
+            $order_products[] = $product;
+        }
+
+        $data['order_products'] = $order_products;
+
+        //get order id, number and series
+        $data['id_order'] = $order['id_order'];
+        $data['order_number'] = $order['order_number'];
+        $data['order_series'] = $order['order_series'];
+        $data['order_code'] = $order['order_code'];
+
+        //add restaurant  datails
+        $data['restaurant_details'] = session()->get('restaurant_details');
+
+        echo view('/order/order_recipt', $data);
     }
 }
