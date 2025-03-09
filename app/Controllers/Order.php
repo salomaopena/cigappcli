@@ -43,7 +43,7 @@ class Order extends BaseController
 
         $data['total_price'] = get_order_total_price();
 
-
+    
 
         return view('order/main_page', $data);
     }
@@ -340,11 +340,13 @@ class Order extends BaseController
         $data = [
             'restaurant_id' => session()->get('restaurant_details')['project_id'],
             'order' => get_order(),
-            'machine_id' => session()->get('machine_id')
+            'machine_id' => session()->get('machine_id'),
         ];
 
         //set order status as paid
         $data['order']['status'] = 'paid';
+
+        
 
         //..........................................
         //Teste
@@ -358,6 +360,7 @@ class Order extends BaseController
         //send request to CigBackofi BO API
         $api = new ApiModel();
         $response = $api->request_checkout($data);
+
 
         //check if there was an error because the product is out of stock
 
@@ -374,25 +377,31 @@ class Order extends BaseController
         //if there was no error, order was processed successfully
         $response = $api->request_final_confirmation($data);
 
+        //dd($response);
+
         //check if there was an error
         if ($response['status'] == 400) {
             return redirect()->back()->with('error', 'O seu pedido não pode ser processado. Dirija-se ao balcão.');
         }
 
-        //get the order id an calculate the order number an series
+        //get the order number and calculate the order number an series
+
+        $new_order_number = $response['data']['order_number'];
         $id_order = $response['data']['id_order'];
-        $temp = define_order_number_from_id($id_order);
+        $temp = define_order_number_from_last_order_number($new_order_number);
+
         $order_number = $temp['order_number'];
         $order_series = $temp['order_series'];
         $order_code = $temp['order_code'];
 
         //update the order in the session with the new order number and series
-        update_order_number($id_order, $order_number, $order_series,$order_code);
+        update_order_number($id_order, $order_number, $order_series, $order_code);
 
         $this->_show_order_recipt();
     }
 
-    private function _show_order_recipt(){
+    private function _show_order_recipt()
+    {
         //check if order is valid
         $order = get_order();
 

@@ -118,7 +118,7 @@ class Main extends BaseController
             !key_exists("status", $data) ||
             !key_exists("message", $data) ||
             $data["status"] != 200 ||
-            $data["message"] != "Success"
+            $data["message"] != "success"
         ) {
             return false;
         }
